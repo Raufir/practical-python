@@ -1,0 +1,1 @@
+while principal > 0:
