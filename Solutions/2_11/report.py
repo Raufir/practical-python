@@ -57,7 +57,6 @@ prices = read_prices('../../Work/Data/prices.csv')
 # Generate the report data
 
 report = make_report_data(portfolio, prices)
-
 # Output the report
 headers = ('Name', 'Shares', 'Price', 'Change')
 print('%10s %10s %10s %10s' % headers)
