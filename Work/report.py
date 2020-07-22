@@ -12,6 +12,7 @@ def read_portfolio(filename):
         headers = next(rows)
 
         for row in rows:
+            record = dict(zip(headers, row))
             stock = {
                  'name'   : row[0],
                  'shares' : int(row[1]),
@@ -34,24 +35,6 @@ def read_prices(filename):
 
     return prices
 
-portfolio = read_portfolio('Data/portfolio.csv')
-prices    = read_prices('Data/prices.csv')
-
-# Calculate the total cost of the portfolio
-'''total_cost = 0.0
-for s in portfolio:
-    total_cost += s['shares']*s['price']
-
-print('Total cost', total_cost)
-
-# Compute the current value of the portfolio
-total_value = 0.0
-for s in portfolio:
-    total_value += s['shares']*prices[s['name']]'''
-
-#print('Current value', total_value)
-#print('Gain', total_value - total_cost)
-
 def make_report(portfolio, prices):
     rows = []
     for stock in portfolio:
@@ -61,6 +44,8 @@ def make_report(portfolio, prices):
         rows.append(summary)    
     return rows
 
+portfolio = read_portfolio('Data/portfolio.csv')
+prices    = read_prices('Data/prices.csv')
 
 report = make_report(portfolio, prices)
 headers = ('Name', 'Shares', 'Price', 'Change')
