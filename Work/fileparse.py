@@ -3,12 +3,12 @@
 # Exercise 3.3
 import csv
 
-def parse_csv(filename, select=None, types=None):
+def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=','):
     '''
     Parse a CSV file into a list of records
     '''
     with open(filename) as f:
-        rows = csv.reader(f)
+        rows = csv.reader(f, delimiter=delimiter)
 
         # Read the file headers
         headers = next(rows)
@@ -29,10 +29,14 @@ def parse_csv(filename, select=None, types=None):
             # Filter the row if specific columns were selected
             if indices:
                 row = [ row[index] for index in indices ]
-                
+
             # Apply type conversion to the row
             if types:
                 row = [func(val) for func, val in zip(types, row)]
+
+            # Make a dictionary or a tuple
+            if headers:
+                record = dict(zip(headers, row))
 
             # Make a dictionary
             record = dict(zip(headers, row))
