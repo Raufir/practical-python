@@ -1,41 +1,32 @@
 # report.py
 #
 # Exercise 2.4
-
+import sys
+from pprint import pprint 
 import csv
+import fileparse
 
 def read_portfolio(filename):
+    '''
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    '''
     
-    portfolio = []
-    with open(filename) as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-
-        for row in rows:
-            record = dict(zip(headers, row))
-            stock = {
-                 'name'   : record['name'],
-                 'shares' : int(record['shares']),
-                 'price'   : float(record['price'])
-            }
-            portfolio.append(stock)
-
+    portfolio = fileparse.parse_csv(filename, select=['name','shares','price'], types=[str,int,float])
     return portfolio
 
 def read_prices(filename):
-    
-    prices = {}
-    with open(filename) as f:
-        rows = csv.reader(f)
-        for row in rows:
-            try:
-                prices[row[0]] = float(row[1])
-            except IndexError:
-                pass
-
+    '''
+    Read a CSV file of price data into a dict mapping names to prices.
+    '''
+    prices = dict(fileparse.parse_csv(filename,types=[str,float], has_headers=False))
     return prices
 
 def make_report(portfolio, prices):
+    '''
+    Make a list of (name, shares, price, change) tuples given a portfolio list
+    and prices dictionary.
+    '''
     rows = []
     for stock in portfolio:
         current_price = prices[stock['name']]
@@ -47,6 +38,9 @@ def make_report(portfolio, prices):
 
 
 def print_report(report):
+    '''
+    Print a nicely formated table from a list of (name, shares, price, change) tuples.
+    '''
     headers = ('Name', 'Shares', 'Price', 'Change')
     print('%10s %10s %10s %10s' % headers)
     print(('-' * 10 + ' ') * len(headers))
@@ -57,6 +51,9 @@ def print_report(report):
 
 
 def portfolio_report(portfoliofile, pricefile):
+    '''
+    Make a stock report given portfolio and price data files.
+    '''
 
     #read data files
     portfolio = read_portfolio(portfoliofile)
